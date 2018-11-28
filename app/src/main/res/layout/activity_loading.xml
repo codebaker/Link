@@ -7,9 +7,9 @@
     android:gravity="center"
     tools:context=".LoadingActivity">
 
-    <ImageView
+    <ImageView android:id="@+id/intro"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/loader"/>
+        android:src="@drawable/intro"/>
 
 </LinearLayout>

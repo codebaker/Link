@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.naver.maps.geometry.LatLng;
@@ -83,9 +84,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
         //출발지점 검색버튼 리스너 등록
-        ((Button)findViewById(R.id.btnDepatureSearch)).setOnClickListener(this);
+        ((ImageButton)findViewById(R.id.btnDepatureSearch)).setOnClickListener(this);
         //중심점 찾기버튼 리스너 등록
-        ((Button)findViewById(R.id.btnSearchCenterPoint)).setOnClickListener(this);
+        ((ImageButton)findViewById(R.id.btnSearchCenterPoint)).setOnClickListener(this);
     }
 
 
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
 
-        // TODO: 2018-11-27  
+        // TODO: 2018-11-27
         naverMap.setLocationSource(locationSource);
         naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
 
