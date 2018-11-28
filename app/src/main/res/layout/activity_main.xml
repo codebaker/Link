@@ -35,7 +35,7 @@
 
     <EditText
         android:id="@+id/editTextDepaturePlace"
-        android:layout_width="271dp"
+        android:layout_width="264dp"
         android:layout_height="37dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="32dp"
