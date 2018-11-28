@@ -38,8 +38,8 @@ public class JSONHelpeAsyncTask extends AsyncTask<String, Void, ArrayList<LinkDT
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
-            conn.setRequestProperty("X-NCP-APIGW-API-KEY-ID", "hzltr7zh5e");
-            conn.setRequestProperty("X-NCP-APIGW-API-KEY", "sE5yynPMqq26Vak5BRntJcX8Z7FP3xy16qzV0qUl");
+            conn.setRequestProperty("X-NCP-APIGW-API-KEY-ID", LinkDTO.X_NCP_APIGW_API_KEY_ID);
+            conn.setRequestProperty("X-NCP-APIGW-API-KEY", LinkDTO.X_NCP_APIGW_API_KEY);
             int responseCode = conn.getResponseCode();
             if(responseCode == 200){
                 in = new BufferedInputStream(conn.getInputStream());
