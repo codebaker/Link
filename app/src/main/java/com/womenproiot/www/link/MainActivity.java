@@ -16,6 +16,8 @@ import android.widget.Toast;
 
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
+import com.naver.maps.map.CameraAnimation;
+import com.naver.maps.map.CameraUpdate;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
@@ -71,8 +73,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //MapFragment 붙이기
         MapFragment mapFragment = (MapFragment)getSupportFragmentManager().findFragmentById(R.id.map_fragment);
         if (mapFragment == null) {
-            NaverMapOptions mapOptions = new NaverMapOptions().locationButtonEnabled(true);
-
+            NaverMapOptions mapOptions = new NaverMapOptions().locationButtonEnabled(false);
             mapFragment = MapFragment.newInstance(mapOptions);
             getSupportFragmentManager().beginTransaction()
                                     .add(R.id.map_fragment, mapFragment)
@@ -80,8 +81,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         mapFragment.getMapAsync(this);
 
-        //지도 화면에 현재위치 찾기 버튼 넣기위해
-        locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
+        //Todo : 지도 화면에 현재위치 찾기 버튼 넣기위해
+        //locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
         //출발지점 검색버튼 리스너 등록
         ((ImageButton)findViewById(R.id.btnDepatureSearch)).setOnClickListener(this);
@@ -90,14 +91,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    @Override
+    /*@Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
             return;
         }
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }
+    }*/
 
 
     @Override
@@ -111,12 +112,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
 
-        // TODO: 2018-11-27
-        naverMap.setLocationSource(locationSource);
-        naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
+        //todo : 지도 화면에 현재위치 찾기 버튼 넣기위해
+        //naverMap.setLocationSource(locationSource);
+        //naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
 
-
-        naverMap.setOnMapClickListener(this::onMapClick);
     }
 
     @Override
@@ -129,22 +128,20 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                     result = new JSONHelpeAsyncTask().execute(query).get();
 
-                    // TODO: 2018-11-27 : 일단은 첫번째 값 지도에 찍기
+                    // TODO:2018-11-27 : 일단은 첫번째 값 지도에 찍기
                     if(result.size()>0) {
-                        setMarker(new LatLng(result.get(0).latitude,result.get(0).longitude));
+                        LatLng latLng = new LatLng(result.get(0).latitude,result.get(0).longitude);
+                        naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
+                        setMarker(latLng);
                     } else {
                         Toast.makeText(this,"검색된 위치정보가 없습니다.",Toast.LENGTH_SHORT).show();
                     }
-
                     break;
 
                 case R.id.btnSearchCenterPoint:
                     LatLng latLng = searchMeetupSpot();
-                    int radius = getResources().getDimensionPixelSize(R.dimen.pick_radius);
-                    if(circle!=null) circle.setMap(null);
-                    circle = new CircleOverlay(latLng,radius);
-                    circle.setColor(getResources().getColor(R.color.colorCircle));
-                    circle.setMap(naverMap);
+                    naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
+                    setCenterCercle(latLng);
                     break;
             }
         } catch (ExecutionException e) {
@@ -174,22 +171,37 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 maxY = (markerArray[i][1] > maxY || maxY == 0) ? markerArray[i][1] : maxY;
             }
         }
+
         LatLngBounds bounds = new LatLngBounds(new LatLng(minX,minY),new LatLng(maxX,maxY));
+        naverMap.setExtent(bounds);
+
 //        Marker marker = new Marker(MarkerIcons.YELLOW);
 //        marker.setPosition(bounds.getCenter());
 //        marker.setMap(naverMap);
+//        marker.setOnClickListener(this::onClick);
         Log.w("[kja]중심점","위도 : " + bounds.getCenter().latitude +" / 경도 : "+ bounds.getCenter().longitude);
         return bounds.getCenter();
         //return new LatLng(minX+((maxX-minX)/2),minY+((maxY-minY)/2));
     }
 
-    private void setMarker(LatLng latLng) {
-        Marker marker = new Marker(MarkerIcons.LIGHTBLUE);
-        marker.setPosition(latLng);
-        marker.setCaptionAlign(Align.Top);
-        //marker.setCaptionText(name);
-        marker.setMap(naverMap);
+    private void setCenterCercle(LatLng latLng) {
+        int radius = getResources().getDimensionPixelSize(R.dimen.pick_radius);
+        if(circle!=null) circle.setMap(null);
+        circle = new CircleOverlay(latLng,radius);
+        circle.setColor(getResources().getColor(R.color.colorCircle));
+        circle.setMap(naverMap);
+    }
 
+    private void setMarker(LatLng latLng) {
+        Marker marker = new Marker(MarkerIcons.RED);
+        marker.setPosition(latLng);
+        marker.setHeight(110);
+        marker.setWidth(80);
+        marker.setCaptionAlign(Align.Center);
+        marker.setCaptionText("박");
+        marker.setCaptionTextSize(18);
+        marker.setMap(naverMap);
+        markerList.add(marker);
         marker.setOnClickListener(this::onClick);
     }
 
@@ -202,23 +214,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Marker marker = (Marker)overlay;
         marker.setMap(null);
         markerList.remove(marker);
-        for (Marker m :markerList) {
-            Log.w("[kja]/marker : ",m.getCaptionText() + " / "+ m.getPosition());
-        }
         return true;
-    }
-
-
-    // TODO: 2018-11-27 에뮬로 테스트하기 위한 맵클릭이벤트---- >    나중에 삭제할것
-    private void onMapClick(PointF pointF, LatLng latLng) {
-        Marker marker = new Marker(MarkerIcons.LIGHTBLUE);
-        marker.setPosition(latLng);
-        marker.setCaptionAlign(Align.Top);
-        marker.setMap(naverMap);
-
-        markerList.add(marker);
-
-        marker.setOnClickListener(this::onClick);
     }
 
 }

@@ -20,19 +20,6 @@
 
     </FrameLayout>
 
-    <ImageButton
-        android:id="@+id/btnDepatureSearch"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:background="@android:color/transparent"
-        android:elevation="10dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/gps_icon"
-        app:layout_constraintEnd_toEndOf="@+id/editTextDepaturePlace"
-        app:layout_constraintTop_toTopOf="@+id/editTextDepaturePlace" />
-
     <EditText
         android:id="@+id/editTextDepaturePlace"
         android:layout_width="264dp"
@@ -73,5 +60,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/btnDepatureSearch"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        android:src="@drawable/gps_icon"
+        app:layout_constraintEnd_toEndOf="@+id/editTextDepaturePlace"
+        app:layout_constraintTop_toTopOf="@+id/editTextDepaturePlace" />
 
 </android.support.constraint.ConstraintLayout>
