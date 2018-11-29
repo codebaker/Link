@@ -21,6 +21,32 @@
     </FrameLayout>
 
     <ImageButton
+        android:id="@+id/buttonAccept"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/buttonCancel"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/btn_accept" />
+
+    <ImageButton
+        android:id="@+id/buttonCancel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/buttonAccept"
+        app:srcCompat="@drawable/btn_cancel" />
+
+    <ImageButton
         android:id="@+id/imageButton"
         android:layout_width="50dp"
         android:layout_height="wrap_content"

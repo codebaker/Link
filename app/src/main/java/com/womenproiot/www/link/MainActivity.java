@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        locationSource = null;
+        //locationSource = null;
     }
 
 
@@ -132,6 +132,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     LatLng latLng = searchMeetupSpot();
                     naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
                     setCenterCercle(latLng);
+                    buttonChange();
                     break;
             }
         } catch (ExecutionException e) {
@@ -139,6 +140,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    private void buttonChange() {
+        
     }
 
     private LatLng searchMeetupSpot() {
