@@ -34,7 +34,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,View.OnClickListener {
-// TODO: 2018-11-28 위치검색 -> 결과 5개 보요주고 선택하면 마커등록
+// TODO: 2018-11-28 위치검색 -> 결과 5개 보여주고 선택하면 마커등록
 // TODO: 2018-11-28 Circle 안에 들어가는 주소,길이름 받아오기  -> 서울시 데이터와 매칭
 // TODO: 2018-11-28 네이버에서 음식점 검색 추천.
 
@@ -44,6 +44,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private NaverMap naverMap=null;
     private CircleOverlay circle = null,circle0 = null;
     private ArrayList<Marker> markerList = new ArrayList<>();
+
+
+
+    private ImageButton btnSearchCenterPoint,buttonAccept,buttonCancel;
 
     //todo : 지도 화면에 현재위치 찾기 버튼 넣기위해
     //private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
@@ -76,8 +80,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //출발지점 검색버튼 리스너 등록
         ((ImageButton)findViewById(R.id.btnDepatureSearch)).setOnClickListener(this);
+
+        buttonAccept= findViewById(R.id.buttonAccept);
+        buttonAccept.setOnClickListener(this);
+
+        buttonCancel= findViewById(R.id.buttonCancel);
+        buttonCancel.setOnClickListener(this);
+
         //중심점 찾기버튼 리스너 등록
-        ((ImageButton)findViewById(R.id.btnSearchCenterPoint)).setOnClickListener(this);
+        btnSearchCenterPoint = findViewById(R.id.btnSearchCenterPoint);
+        btnSearchCenterPoint.setOnClickListener(this);
     }
 
 
@@ -110,29 +122,45 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onClick(View view) {
+        LatLng latLng=null;
         try {
             switch (view.getId()) {
                 case R.id.btnDepatureSearch:
                     String query = ((EditText)findViewById(R.id.editTextDepaturePlace)).getText().toString();
-                    ArrayList<LinkDTO.Place> result = null;
 
-                    result = new JSONHelpeAsyncTask().execute(query).get();
+                    ArrayList<LinkDTO.Place> jsonResult = null;
+                    jsonResult = new JSONHelpeAsyncTask().execute(query).get();
 
                     // TODO:2018-11-27 : 일단은 첫번째 값 지도에 찍기
-                    if(result.size()>0) {
-                        LatLng latLng = new LatLng(result.get(0).latitude,result.get(0).longitude);
+                    if(jsonResult.size()>0) {
+                        latLng = new LatLng(jsonResult.get(0).latitude,jsonResult.get(0).longitude);
                         naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
                         setMarker(latLng);
                     } else {
                         Toast.makeText(this,"검색된 위치정보가 없습니다.",Toast.LENGTH_SHORT).show();
                     }
                     break;
-
                 case R.id.btnSearchCenterPoint:
-                    LatLng latLng = searchMeetupSpot();
+                    if(markerList.size()<2) {
+                        Toast.makeText(this,"출발지점을 2곳이상 등록하세요.",Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                    buttonChange();
+                    latLng = searchMeetupSpot();
                     naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
                     setCenterCercle(latLng);
-                    buttonChange();
+                    break;
+                case R.id.buttonAccept:
+
+
+
+
+                    
+                    // TODO: 2018-11-29 db에 넣고 인텐트
+                    startActivityForResult(new Intent(this,ResultPlacesActivity.class),3000);
+                    break;
+                case R.id.buttonCancel:
+                    // TODO: 2018-11-29 db에 마커들을 모두 지우거나 그냥 두고 중간점 찾기버튼을 보이거나
                     break;
             }
         } catch (ExecutionException e) {
@@ -142,8 +170,25 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+
+
+
+
+
+
     private void buttonChange() {
-        
+        btnSearchCenterPoint.setVisibility(
+                (btnSearchCenterPoint.getVisibility() != View.VISIBLE)?
+                View.VISIBLE : View.GONE
+        );
+        buttonAccept.setVisibility(
+                (buttonAccept.getVisibility() != View.VISIBLE)?
+                        View.VISIBLE : View.GONE
+        );
+        buttonCancel.setVisibility(
+                (buttonCancel.getVisibility() != View.VISIBLE)?
+                        View.VISIBLE : View.GONE
+        );
     }
 
     private LatLng searchMeetupSpot() {
@@ -157,7 +202,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 markerArray[i][1] = markerList.get(i).getPosition().longitude; // Y,경도
             }
         }
-
         if (markerArray.length > 0){
             for(int i=0; i< markerArray.length; i++){
                 minX = (markerArray[i][0] < minX || minX == 0) ? markerArray[i][0] : minX;
@@ -166,7 +210,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 maxY = (markerArray[i][1] > maxY || maxY == 0) ? markerArray[i][1] : maxY;
             }
         }
-
         LatLngBounds bounds = new LatLngBounds(new LatLng(minX,minY),new LatLng(maxX,maxY));
         naverMap.setExtent(bounds);
 
