@@ -20,6 +20,25 @@
 
     </FrameLayout>
 
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toTopOf="@+id/btnSearchCenterPoint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.006"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.933"
+        app:srcCompat="@drawable/member_plus" />
+
     <EditText
         android:id="@+id/editTextDepaturePlace"
         android:layout_width="264dp"
@@ -38,7 +57,7 @@
         app:layout_constraintTop_toTopOf="@+id/map_fragment" />
 
 
-    <android.support.design.widget.FloatingActionButton
+    <!--<android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="69dp"
         android:layout_height="46dp"
@@ -48,12 +67,13 @@
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/member_plus" />
+        app:srcCompat="@drawable/member_plus" />-->
 
     <ImageButton
         android:id="@+id/btnSearchCenterPoint"
-        android:layout_width="wrap_content"
-        android:layout_height="33dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
         android:src="@drawable/btn_start"
@@ -67,6 +87,7 @@
         android:layout_height="25dp"
         android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
+        android:adjustViewBounds="true"
         android:background="@android:color/transparent"
         android:scaleType="fitXY"
         android:src="@drawable/gps_icon"

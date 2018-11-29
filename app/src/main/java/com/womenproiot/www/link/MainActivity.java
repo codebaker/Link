@@ -42,11 +42,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     static final int REQUEST_CODE = 2000;
 
     private NaverMap naverMap=null;
-    private CircleOverlay circle = null;
+    private CircleOverlay circle = null,circle0 = null;
     private ArrayList<Marker> markerList = new ArrayList<>();
 
-    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
-    private FusedLocationSource locationSource;
+    //todo : 지도 화면에 현재위치 찾기 버튼 넣기위해
+    //private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
+    //private FusedLocationSource locationSource;
 
 
 
@@ -58,17 +59,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //로딩화면 실행
         Intent intent = new Intent(this, LoadingActivity.class);
         startActivity(intent);
-
-        //플로딩 추가버튼
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null)
-                        .show();
-            }
-        });
 
         //MapFragment 붙이기
         MapFragment mapFragment = (MapFragment)getSupportFragmentManager().findFragmentById(R.id.map_fragment);
@@ -186,10 +176,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private void setCenterCercle(LatLng latLng) {
         int radius = getResources().getDimensionPixelSize(R.dimen.pick_radius);
+
         if(circle!=null) circle.setMap(null);
+        if(circle0!=null) circle0.setMap(null);
+
         circle = new CircleOverlay(latLng,radius);
         circle.setColor(getResources().getColor(R.color.colorCircle));
         circle.setMap(naverMap);
+        circle0 = new CircleOverlay(latLng,50);
+        circle0.setColor(getResources().getColor(R.color.colorCircle0));
+        circle0.setMap(naverMap);
     }
 
     private void setMarker(LatLng latLng) {
