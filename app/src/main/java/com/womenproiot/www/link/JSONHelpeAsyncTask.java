@@ -60,8 +60,6 @@ public class JSONHelpeAsyncTask extends AsyncTask<String, Void, ArrayList<LinkDT
                 e.printStackTrace();
             }
         }
-
-
         return resultList;
     }
 

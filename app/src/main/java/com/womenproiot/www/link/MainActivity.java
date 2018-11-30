@@ -1,7 +1,12 @@
 package com.womenproiot.www.link;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.PointF;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +23,7 @@ import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraUpdate;
+import com.naver.maps.map.LocationSource;
 import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
@@ -29,6 +35,8 @@ import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
 import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.util.MarkerIcons;
+import com.womenproiot.www.link.util.GpsInfo;
+import com.womenproiot.www.link.util.MyLocation;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -45,14 +53,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private CircleOverlay circle = null,circle0 = null;
     private ArrayList<Marker> markerList = new ArrayList<>();
 
-
-
     private ImageButton btnSearchCenterPoint,buttonAccept,buttonCancel;
 
     //todo : 지도 화면에 현재위치 찾기 버튼 넣기위해
     //private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
     //private FusedLocationSource locationSource;
-
 
 
     @Override
@@ -114,6 +119,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
 
+        //현재위치 받아와서 이동
+        LatLng latLng = new LatLng(new GpsInfo(MainActivity.this).getLocation());
+        naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
+
         //todo : 지도 화면에 현재위치 찾기 버튼 넣기위해
         //naverMap.setLocationSource(locationSource);
         //naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
@@ -152,10 +161,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     break;
                 case R.id.buttonAccept:
 
-
-
-
-                    
                     // TODO: 2018-11-29 db에 넣고 인텐트
                     startActivityForResult(new Intent(this,ResultPlacesActivity.class),3000);
                     break;
@@ -248,7 +253,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         markerList.add(marker);
         marker.setOnClickListener(this::onClick);
     }
-
 
     /*
      * 마커 클릭하면....

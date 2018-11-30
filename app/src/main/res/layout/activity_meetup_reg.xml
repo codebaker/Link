@@ -4,6 +4,104 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MeetupRegActivity">
+    tools:layout_editor_absoluteY="25dp">
 
+
+    <Spinner
+        android:id="@+id/spinnerAge"
+        android:layout_width="184dp"
+        android:layout_height="39dp"
+        android:layout_marginBottom="89dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonInput"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup" />
+
+    <Button
+        android:id="@+id/buttonInput"
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/btn_start"
+        android:scaleType="fitXY"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/editTextNameInput"
+        android:layout_width="wrap_content"
+        android:layout_height="44dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/round"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="모임 이름은?"
+        android:importantForAutofill="no"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:targetApi="o" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="0dp"
+        android:layout_height="173dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="52dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/spinnerAge"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNameInput">
+
+        <RadioButton
+            android:id="@+id/womanButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="50dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:button="@drawable/click"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextNameInput"
+            app:srcCompat="@drawable/gender_women_off" />
+
+        <RadioButton
+            android:id="@+id/manButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="50dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:button="@drawable/clickman"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toEndOf="@+id/womanButton"
+            app:layout_constraintTop_toBottomOf="@+id/editTextNameInput"
+            app:srcCompat="@drawable/gender_men_off" />
+
+        <RadioButton
+            android:id="@+id/mixButton"
+            android:layout_width="91dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="50dp"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:button="@drawable/clickmix"
+            android:scaleType="fitXY"
+            app:layout_constraintStart_toEndOf="@+id/manButton"
+            app:layout_constraintTop_toBottomOf="@+id/editTextNameInput"
+            app:srcCompat="@drawable/gender_mix_off" />
+
+    </RadioGroup>
 </android.support.constraint.ConstraintLayout>

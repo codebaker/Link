@@ -2,21 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.womenproiot.www.link">
 
-    <!-- 반드시 추가 -->
+    <!-- 인터넷 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- 위치정보활용시 추가 -->
+    <!-- 위치정보 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- 위치정보활용시 추가 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- WIFI 상태활용시 추가 -->
+    <!-- WIFI상태 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- WIFI 상태활용시 추가 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
-    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
-    <uses-permission android:name="android.permission.READ_PROFILE" />
-    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -29,19 +22,19 @@
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="@string/naver_map_sdk_client_id" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".LoadingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".MeetupRegActivity" />
         <activity android:name=".LocationRegActivity" />
         <activity android:name=".AttendeesActivity" />
         <activity android:name=".SearchPlacesActivity" />
         <activity android:name=".ResultPlacesActivity" />
-        <activity android:name=".LoadingActivity"/>
     </application>
 
 </manifest>
