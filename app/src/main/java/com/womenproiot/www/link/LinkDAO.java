@@ -6,15 +6,22 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 
+import com.naver.maps.map.overlay.Marker;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+
 public class LinkDAO extends SQLiteOpenHelper {
     private static LinkDAO instance;
     private static SQLiteDatabase mdb;
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
     String sql;
     Cursor cursor;
 
     public static final String DB_NAME = "link.db";
     private static final SQLiteDatabase.CursorFactory FACTORY = null;
-    public static final int VERSION = 2;
+    public static final int VERSION = 7;
 
     //db를 한개만 열어서 쓰기 위해 생성자를 private로.
     //객체는 getInstance()로만 얻을 수 있음.
@@ -28,6 +35,7 @@ public class LinkDAO extends SQLiteOpenHelper {
         mdb = instance.getWritableDatabase();
         return instance;
     }
+
 
 
 
@@ -82,4 +90,25 @@ public class LinkDAO extends SQLiteOpenHelper {
     }
 
 
+    /*
+    * SearchPlace에서 ResultPlaces로
+    * */
+    public void insertAttendees(String seq, ArrayList<AttendeeDto> attendees) {
+        String sql = "INSERT INTO " +
+                    "attendee (fr_seq,name,latitude,longitude,reg_date,modi_date,fr_code,address) " +
+                    "values (?,?,?,?,?,?,?,?)";
+
+        for (AttendeeDto atd : attendees) {
+
+            mdb.execSQL(sql,new Object[]{seq
+                                        ,atd.name
+                                        ,String.valueOf(atd.latitude)
+                                        ,String.valueOf(atd.longitude)
+                                        ,format.format(new Date())
+                                        ,"null"
+                                        ,atd.sessionId
+                                        ,atd.roadAddress
+            });
+        }
+    }
 }

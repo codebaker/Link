@@ -21,7 +21,7 @@ public class LoadingActivity extends AppCompatActivity {
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
-                    Intent intent = new Intent(LoadingActivity.this,MainActivity.class);
+                    Intent intent = new Intent(LoadingActivity.this,MeetupRegActivity.class);
                     startActivity(intent);
                 }
             }

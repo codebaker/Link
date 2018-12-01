@@ -15,19 +15,18 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
-public class JSONHelpeAsyncTask extends AsyncTask<String, Void, ArrayList<LinkDTO.Place>> {
+public class JSONHelpeAsyncTask extends AsyncTask<String, Void, ArrayList<AttendeeDto>> {
 
     final static String NAVER_MAP_SEARCH_URL = "https://naveropenapi.apigw.ntruss.com/map-place/v1/search?query=";
 
     /*
      *장소 검색 API는 어떤 시설이나 지리적 위치의 장소 명칭을 질의어로 입력받아 최대 5개 장소의 장소 정보를 검색합니다.
      * */
-    private ArrayList<LinkDTO.Place> getLocation(String... query) {
+    private ArrayList<AttendeeDto> getLocation(String... query) {
 
-        ArrayList<LinkDTO.Place> resultList=new ArrayList<>();
+        ArrayList<AttendeeDto> resultList=new ArrayList<>();
         HttpURLConnection conn=null;
         InputStream in=null;
 
@@ -38,8 +37,8 @@ public class JSONHelpeAsyncTask extends AsyncTask<String, Void, ArrayList<LinkDT
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setRequestProperty("Content-Type","application/x-www-form-urlencoded; charset=UTF-8");
-            conn.setRequestProperty("X-NCP-APIGW-API-KEY-ID", LinkDTO.X_NCP_APIGW_API_KEY_ID);
-            conn.setRequestProperty("X-NCP-APIGW-API-KEY", LinkDTO.X_NCP_APIGW_API_KEY);
+            conn.setRequestProperty("X-NCP-APIGW-API-KEY-ID", Constants.X_NCP_APIGW_API_KEY_ID);
+            conn.setRequestProperty("X-NCP-APIGW-API-KEY", Constants.X_NCP_APIGW_API_KEY);
             int responseCode = conn.getResponseCode();
             if(responseCode == 200){
                 in = new BufferedInputStream(conn.getInputStream());
@@ -63,8 +62,8 @@ public class JSONHelpeAsyncTask extends AsyncTask<String, Void, ArrayList<LinkDT
         return resultList;
     }
 
-    private ArrayList<LinkDTO.Place> parseJson(InputStream in) {
-        ArrayList<LinkDTO.Place> result = new ArrayList<>();
+    private ArrayList<AttendeeDto> parseJson(InputStream in) {
+        ArrayList<AttendeeDto> result = new ArrayList<>();
         try {
             JSONObject json = new JSONObject(getStringFromInputStream(in));
             JSONArray placeArray = json.getJSONArray("places");
@@ -73,14 +72,11 @@ public class JSONHelpeAsyncTask extends AsyncTask<String, Void, ArrayList<LinkDT
             for (int i=0 ; i<placeArray.length() ; i++) {
                 name = placeArray.getJSONObject(i).getString("name");
                 rAddr = placeArray.getJSONObject(i).getString("road_address");
-                jAddr = placeArray.getJSONObject(i).getString("jibun_address");
-                phone = placeArray.getJSONObject(i).getString("phone_number");
                 lon = placeArray.getJSONObject(i).getDouble("x");
                 lat = placeArray.getJSONObject(i).getDouble("y");
-                dist = placeArray.getJSONObject(i).getDouble("distance");
                 id = placeArray.getJSONObject(i).getString("sessionId");
 
-                result.add(new LinkDTO().new Place(name,rAddr,jAddr,phone,lat,lon,dist,id));
+                result.add(new AttendeeDto(name,rAddr,lat,lon,id));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -113,8 +109,8 @@ public class JSONHelpeAsyncTask extends AsyncTask<String, Void, ArrayList<LinkDT
 
 
     @Override
-    protected ArrayList<LinkDTO.Place> doInBackground(String... strings) {
-        ArrayList<LinkDTO.Place> result = getLocation(strings);
+    protected ArrayList<AttendeeDto> doInBackground(String... strings) {
+        ArrayList<AttendeeDto> result = getLocation(strings);
         return result;
     }
 }

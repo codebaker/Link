@@ -43,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LatLng mLatLng = null;
     private CircleOverlay circle = null,circle0 = null;
     private ArrayList<Marker> markerList = new ArrayList<>();
+    private ArrayList<AttendeeDto> attendeeList = new ArrayList<>();
 
     private ImageButton btnSearchCenterPoint,buttonAccept,buttonCancel;
 
@@ -105,39 +106,52 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng latLng=null;
         try {
             switch (view.getId()) {
+
                 case R.id.btnDepatureSearch:
+
                     String[] query = new String[32];
                     query[0] = ((EditText)findViewById(R.id.editTextDepaturePlace)).getText().toString();
                     query[1] = mLatLng.longitude+","+mLatLng.latitude;
 
-                    ArrayList<LinkDTO.Place> jsonResult = null;
+                    ArrayList<AttendeeDto> jsonResult = null;
                     jsonResult = new JSONHelpeAsyncTask().execute(query).get();
 
-                    // TODO:2018-11-27 : 일단은 첫번째 값 지도에 찍기
                     if(jsonResult.size()>0) {
                         latLng = new LatLng(jsonResult.get(0).latitude,jsonResult.get(0).longitude);
+                        attendeeList.add(jsonResult.get(0));
+
+                        // TODO: 미진씨 리스트뷰 작업 추가
+
                         naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
                         setMarker(latLng);
                     } else {
                         Toast.makeText(this,"검색된 위치정보가 없습니다.",Toast.LENGTH_SHORT).show();
                     }
                     break;
+
                 case R.id.btnSearchCenterPoint:
+
                     if(markerList.size()<2) {
                         Toast.makeText(this,"출발지점을 2곳이상 등록하세요.",Toast.LENGTH_SHORT).show();
                         break;
                     }
+
                     buttonChange();
                     latLng = searchMeetupSpot();
                     naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
                     setCenterCercle(latLng);
                     break;
+
                 case R.id.buttonAccept:
 
-                    // TODO: 2018-11-29 db에 넣고 인텐트
-                    startActivityForResult(new Intent(this,ResultPlacesActivity.class),3000);
+                    LinkDAO.getInstance(this).insertAttendees(getIntent().getStringExtra("seq"),attendeeList);
+                    Intent intent = new Intent(this, ResultPlacesActivity.class);
+                    intent.putExtra("seq",getIntent().getStringExtra("seq"));
+                    startActivityForResult(intent,REQUEST_CODE);
                     break;
+
                 case R.id.buttonCancel:
+                    
                     // TODO: 2018-11-29 db에 마커들을 모두 지우거나 그냥 두고 중간점 찾기버튼을 보이거나
                     break;
             }

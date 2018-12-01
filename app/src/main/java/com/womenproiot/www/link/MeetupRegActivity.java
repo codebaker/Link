@@ -193,6 +193,7 @@ public class MeetupRegActivity extends AppCompatActivity implements AdapterView.
             Toast.makeText(getApplicationContext(), title + "모임등록 완료", LENGTH_SHORT).show();
 
             Intent intent  = new Intent(this,MainActivity.class);
+            intent.putExtra("seq",str);
             startActivity(intent);
 
 
