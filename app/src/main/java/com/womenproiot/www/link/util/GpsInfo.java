@@ -223,6 +223,9 @@ public class GpsInfo extends Service implements LocationListener {
         alertDialog.show();
     }
 
+    public String getCoordinateToString() {
+        return String.valueOf(lon)+","+String.valueOf(lat);
+    }
     @Override
     public IBinder onBind(Intent arg0) {
         return null;
@@ -247,6 +250,8 @@ public class GpsInfo extends Service implements LocationListener {
         // TODO Auto-generated method stub
 
     }
+
+
 }
 
 

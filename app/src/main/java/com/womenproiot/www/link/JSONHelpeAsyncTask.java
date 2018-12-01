@@ -25,15 +25,15 @@ public class JSONHelpeAsyncTask extends AsyncTask<String, Void, ArrayList<LinkDT
     /*
      *장소 검색 API는 어떤 시설이나 지리적 위치의 장소 명칭을 질의어로 입력받아 최대 5개 장소의 장소 정보를 검색합니다.
      * */
-    private ArrayList<LinkDTO.Place> getLocation(String query) {
+    private ArrayList<LinkDTO.Place> getLocation(String... query) {
 
         ArrayList<LinkDTO.Place> resultList=new ArrayList<>();
         HttpURLConnection conn=null;
         InputStream in=null;
 
         try {
-            String encodeQuery = URLEncoder.encode(query,"UTF-8");
-            String apiUrl = NAVER_MAP_SEARCH_URL+query+"&coordinate=127.1054328,37.3595963";
+            //String encodeQuery = URLEncoder.encode(query,"UTF-8");
+            String apiUrl = NAVER_MAP_SEARCH_URL+query[0]+"&coordinate="+query[1];
             URL url = new URL(apiUrl);
             conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
@@ -114,7 +114,7 @@ public class JSONHelpeAsyncTask extends AsyncTask<String, Void, ArrayList<LinkDT
 
     @Override
     protected ArrayList<LinkDTO.Place> doInBackground(String... strings) {
-        ArrayList<LinkDTO.Place> result = getLocation(strings[0]);
+        ArrayList<LinkDTO.Place> result = getLocation(strings);
         return result;
     }
 }

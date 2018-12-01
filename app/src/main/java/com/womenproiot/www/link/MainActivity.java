@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     static final int REQUEST_CODE = 2000;
 
     private NaverMap naverMap=null;
+    private LatLng mLatLng = null;
     private CircleOverlay circle = null,circle0 = null;
     private ArrayList<Marker> markerList = new ArrayList<>();
 
@@ -63,6 +64,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         mapFragment.getMapAsync(this);
 
+        // 권한 요청을 해야 함. onCreate에
+        if (!isPermission) callPermission();
+        //현재위치 받아와서 이동
+        mLatLng = new LatLng(new GpsInfo(MainActivity.this).getLocation());
+        callPermission();
+
+
         //출발지점 검색버튼 리스너 등록
         ((ImageButton)findViewById(R.id.btnDepatureSearch)).setOnClickListener(this);
 
@@ -75,8 +83,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //중심점 찾기버튼 리스너 등록
         btnSearchCenterPoint = findViewById(R.id.btnSearchCenterPoint);
         btnSearchCenterPoint.setOnClickListener(this);
-
-
     }
 
     @Override
@@ -90,13 +96,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
 
-
-        // 권한 요청을 해야 함. onCreate에
-        if (!isPermission) callPermission();
-        //현재위치 받아와서 이동
-        LatLng latLng = new LatLng(new GpsInfo(MainActivity.this).getLocation());
-        naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
-        callPermission();
+        //현재 위치로 카메라 이동
+        naverMap.moveCamera(CameraUpdate.scrollTo(mLatLng).animate(CameraAnimation.Fly, 3000));
     }
 
     @Override
@@ -105,7 +106,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         try {
             switch (view.getId()) {
                 case R.id.btnDepatureSearch:
-                    String query = ((EditText)findViewById(R.id.editTextDepaturePlace)).getText().toString();
+                    String[] query = new String[32];
+                    query[0] = ((EditText)findViewById(R.id.editTextDepaturePlace)).getText().toString();
+                    query[1] = mLatLng.longitude+","+mLatLng.latitude;
 
                     ArrayList<LinkDTO.Place> jsonResult = null;
                     jsonResult = new JSONHelpeAsyncTask().execute(query).get();
@@ -144,10 +147,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             e.printStackTrace();
         }
     }
-
-
-
-
 
 
 
