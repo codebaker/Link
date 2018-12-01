@@ -1,20 +1,14 @@
 package com.womenproiot.www.link;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.PointF;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -23,8 +17,6 @@ import com.naver.maps.geometry.LatLng;
 import com.naver.maps.geometry.LatLngBounds;
 import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraUpdate;
-import com.naver.maps.map.LocationSource;
-import com.naver.maps.map.LocationTrackingMode;
 import com.naver.maps.map.MapFragment;
 import com.naver.maps.map.NaverMap;
 import com.naver.maps.map.NaverMapOptions;
@@ -33,10 +25,8 @@ import com.naver.maps.map.overlay.Align;
 import com.naver.maps.map.overlay.CircleOverlay;
 import com.naver.maps.map.overlay.Marker;
 import com.naver.maps.map.overlay.Overlay;
-import com.naver.maps.map.util.FusedLocationSource;
 import com.naver.maps.map.util.MarkerIcons;
 import com.womenproiot.www.link.util.GpsInfo;
-import com.womenproiot.www.link.util.MyLocation;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
@@ -55,19 +45,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private ImageButton btnSearchCenterPoint,buttonAccept,buttonCancel;
 
-    //todo : 지도 화면에 현재위치 찾기 버튼 넣기위해
-    //private static final int LOCATION_PERMISSION_REQUEST_CODE = 1000;
-    //private FusedLocationSource locationSource;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //로딩화면 실행
-        Intent intent = new Intent(this, LoadingActivity.class);
-        startActivity(intent);
 
         //MapFragment 붙이기
         MapFragment mapFragment = (MapFragment)getSupportFragmentManager().findFragmentById(R.id.map_fragment);
@@ -79,9 +62,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     .commit();
         }
         mapFragment.getMapAsync(this);
-
-        //Todo : 지도 화면에 현재위치 찾기 버튼 넣기위해
-        //locationSource = new FusedLocationSource(this, LOCATION_PERMISSION_REQUEST_CODE);
 
         //출발지점 검색버튼 리스너 등록
         ((ImageButton)findViewById(R.id.btnDepatureSearch)).setOnClickListener(this);
@@ -95,18 +75,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //중심점 찾기버튼 리스너 등록
         btnSearchCenterPoint = findViewById(R.id.btnSearchCenterPoint);
         btnSearchCenterPoint.setOnClickListener(this);
+
+
     }
-
-
-    /*@Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        if (locationSource.onRequestPermissionsResult(requestCode, permissions, grantResults)) {
-            return;
-        }
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-    }*/
-
 
     @Override
     protected void onDestroy() {
@@ -119,14 +90,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(@NonNull NaverMap naverMap) {
         this.naverMap = naverMap;
 
+
+        // 권한 요청을 해야 함. onCreate에
+        if (!isPermission) callPermission();
         //현재위치 받아와서 이동
         LatLng latLng = new LatLng(new GpsInfo(MainActivity.this).getLocation());
         naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
-
-        //todo : 지도 화면에 현재위치 찾기 버튼 넣기위해
-        //naverMap.setLocationSource(locationSource);
-        //naverMap.setLocationTrackingMode(LocationTrackingMode.Follow);
-
+        callPermission();
     }
 
     @Override
@@ -265,6 +235,36 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         return true;
     }
 
+
+
+
+
+    //권한관련
+    private final int PERMISSIONS_ACCESS_FINE_LOCATION = 1000;
+    private final int PERMISSIONS_ACCESS_COARSE_LOCATION = 1001;
+    private boolean isPermission = false;
+
+    private void callPermission() {
+        // Check the SDK version and whether the permission is already granted or not.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    PERMISSIONS_ACCESS_FINE_LOCATION);
+
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+
+            requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSIONS_ACCESS_COARSE_LOCATION);
+        } else {
+            isPermission = true;
+        }
+    }
 }
 
 

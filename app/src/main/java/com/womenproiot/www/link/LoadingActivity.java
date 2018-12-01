@@ -17,11 +17,11 @@ public class LoadingActivity extends AppCompatActivity {
         Thread timerThread = new Thread(){
             public void run(){
                 try{
-                    sleep(700);
+                    sleep(3000);
                 }catch(InterruptedException e){
                     e.printStackTrace();
                 }finally{
-                    Intent intent = new Intent(LoadingActivity.this,MeetupRegActivity.class);
+                    Intent intent = new Intent(LoadingActivity.this,MainActivity.class);
                     startActivity(intent);
                 }
             }

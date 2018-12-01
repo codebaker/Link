@@ -14,7 +14,7 @@ public class LinkDAO extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "link.db";
     private static final SQLiteDatabase.CursorFactory FACTORY = null;
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 
     //db를 한개만 열어서 쓰기 위해 생성자를 private로.
     //객체는 getInstance()로만 얻을 수 있음.
@@ -66,17 +66,17 @@ public class LinkDAO extends SQLiteOpenHelper {
 
     //테스트 하기위한 fake data
     private void autoInsert(@NonNull SQLiteDatabase db){
-        String meetup = "INSERT INTO MEETUP VALUES ('m0172','수요일엔닭모임', '40대', '여성','2018/11/29 06:20:09',null)";
+        String meetup = "INSERT INTO MEETUP VALUES ('m0172','수요일엔닭모임', '40대', '여성','2018/11/29 06:20:05',null)";
         String attendee[] = new String[5];
         attendee[0] = "INSERT INTO attendee (fr_seq,name,latitude,longitude,reg_date,modi_date,fr_code,address) values ('m0172','광화문역 5호선', 37.5712497, 126.9773945, '2018/11/29 06:20:09',null,'QuQTW2cBOAUY6uUl2HEK','서울특별시 종로구 세종대로 172' )";
-        attendee[1] = "INSERT INTO attendee (fr_seq,name,latitude,longitude,reg_date,modi_date,fr_code,address) values ('m0172','광화문역 5호선', 37.5712497, 126.9773945, '2018/11/29 06:20:09',null,'QuQTW2cBOAUY6uUl2HEK','서울특별시 종로구 세종대로 172' )";
-        attendee[2] = "INSERT INTO attendee (fr_seq,name,latitude,longitude,reg_date,modi_date,fr_code,address) values ('m0172','광화문역 5호선', 37.5712497, 126.9773945, '2018/11/29 06:20:09',null,'QuQTW2cBOAUY6uUl2HEK','서울특별시 종로구 세종대로 172' )";
-        attendee[3] = "INSERT INTO attendee (fr_seq,name,latitude,longitude,reg_date,modi_date,fr_code,address) values ('m0172','광화문역 5호선', 37.5712497, 126.9773945, '2018/11/29 06:20:09',null,'QuQTW2cBOAUY6uUl2HEK','서울특별시 종로구 세종대로 172' )";
-        attendee[4] = "INSERT INTO attendee (fr_seq,name,latitude,longitude,reg_date,modi_date,fr_code,address) values ('m0172','광화문역 5호선', 37.5712497, 126.9773945, '2018/11/29 06:20:09',null,'QuQTW2cBOAUY6uUl2HEK','서울특별시 종로구 세종대로 172' )";
+        attendee[1] = "INSERT INTO attendee (fr_seq,name,latitude,longitude,reg_date,modi_date,fr_code,address) values ('m0172','일산역 경의중앙선', 37.6820087, 126.7700597, '2018/11/29 06:20:10',null,'P8JjZWcBZphKmN8QmeUv','경기도 고양시 일산서구 경의로 672' )";
+        attendee[2] = "INSERT INTO attendee (fr_seq,name,latitude,longitude,reg_date,modi_date,fr_code,address) values ('m0172','강남역7번출구', 37.4971748, 127.0277347, '2018/11/29 06:20:11',null,'4bFjZWcBe9kwkY1_1iAq','서울특별시 서초구 강남대로 433' )";
+        attendee[3] = "INSERT INTO attendee (fr_seq,name,latitude,longitude,reg_date,modi_date,fr_code,address) values ('m0172','신갈역 분당선', 37.2861338, 127.1113233, '2018/11/29 06:20:12',null,'4b9kZWcBLhmWpuc1D1v4','경기도 용인시 기흥구 신갈동 167' )";
+        attendee[4] = "INSERT INTO attendee (fr_seq,name,latitude,longitude,reg_date,modi_date,fr_code,address) values ('m0172','의정부역 1호선', 37.7384318, 127.0460187, '2018/11/29 06:20:13',null,'VKljZWcBe9kwkY1_OiJ7','경기도 의정부시 평화로 525' )";
 
         //0번 테이블은 Takeout
         db.execSQL(meetup);
-        for (int i = 1; i < attendee.length; i++) {
+        for (int i = 0; i < attendee.length; i++) {
             db.execSQL(attendee[i]);
         }
     }
