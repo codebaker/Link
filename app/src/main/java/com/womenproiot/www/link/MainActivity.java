@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     break;
 
                 case R.id.buttonCancel:
-                    
+
                     // TODO: 2018-11-29 db에 마커들을 모두 지우거나 그냥 두고 중간점 찾기버튼을 보이거나
                     break;
             }
