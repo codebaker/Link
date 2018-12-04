@@ -111,4 +111,10 @@ public class LinkDAO extends SQLiteOpenHelper {
             });
         }
     }
+
+    public void selectMeetUp(String seq) {
+        String sql = "SELECT * FROM meeup INNER JOIN attendee ON seq = fr_seq WHERE seq = ?";
+        Cursor cursor = mdb.rawQuery(sql,new String[]{seq});
+        // TODO: 2018-12-05 김정아 작업 여기까지. 
+    }
 }

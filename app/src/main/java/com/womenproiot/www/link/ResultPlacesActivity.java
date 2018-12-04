@@ -29,6 +29,8 @@ public class ResultPlacesActivity extends AppCompatActivity implements OnMapRead
                     .commit();
         }
         mapFragment.getMapAsync(this);
+
+        LinkDAO.getInstance(this).selectMeetUp(getIntent().getStringExtra("seq"));
     }
 
     @Override
