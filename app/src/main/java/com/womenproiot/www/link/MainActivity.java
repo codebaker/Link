@@ -9,8 +9,11 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.naver.maps.geometry.LatLng;
@@ -103,7 +106,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onClick(View view) {
-        LatLng latLng=null;
         try {
             switch (view.getId()) {
 
@@ -117,13 +119,33 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     jsonResult = new JSONHelpeAsyncTask().execute(query).get();
 
                     if(jsonResult.size()>0) {
-                        latLng = new LatLng(jsonResult.get(0).latitude,jsonResult.get(0).longitude);
-                        attendeeList.add(jsonResult.get(0));
 
                         // TODO: 미진씨 리스트뷰 작업 추가
+                        ListView result_list = (ListView) findViewById (R.id.result_list);
+                        ArrayList<String> strArray = new ArrayList<> ();
+                        for (AttendeeDto place : jsonResult) {
+                            String str = place.name + " \n " + place.roadAddress ;
+                                    //+ " / " + place.longitude + " / " + place.latitude;
+                            strArray.add (str);
+                        }
 
-                        naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
-                        setMarker(latLng);
+                        result_list.setVisibility (View.VISIBLE);
+
+                        ArrayAdapter adapter = new ArrayAdapter<> (this, android.R.layout.simple_list_item_1, strArray);
+                        result_list.setAdapter (adapter);
+
+                        final ArrayList<AttendeeDto> resultFinal = jsonResult;
+                        result_list.setOnItemClickListener (new AdapterView.OnItemClickListener () {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                result_list.setVisibility (View.GONE);
+                                LatLng latLng = new LatLng(resultFinal.get(position).latitude, resultFinal.get(position).longitude);
+                                naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
+                                setMarker (latLng);
+                            }
+
+                        });
+
                     } else {
                         Toast.makeText(this,"검색된 위치정보가 없습니다.",Toast.LENGTH_SHORT).show();
                     }
@@ -137,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
 
                     buttonChange();
-                    latLng = searchMeetupSpot();
+                    LatLng latLng = searchMeetupSpot();
                     naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
                     setCenterCercle(latLng);
                     break;

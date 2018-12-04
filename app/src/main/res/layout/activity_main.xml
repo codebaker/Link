@@ -104,4 +104,16 @@
         app:layout_constraintEnd_toEndOf="@+id/editTextDepaturePlace"
         app:layout_constraintTop_toTopOf="@+id/editTextDepaturePlace" />
 
+    <ListView
+        android:id="@+id/result_list"
+        android:layout_width="337dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="294dp"
+        android:visibility="gone"
+        android:background="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/btnSearchCenterPoint"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnDepatureSearch" />
+
 </android.support.constraint.ConstraintLayout>
