@@ -106,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public void onClick(View view) {
+        LatLng centerlatLng=null;
         try {
             switch (view.getId()) {
 
@@ -159,15 +160,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     }
 
                     buttonChange();
-                    LatLng latLng = searchMeetupSpot();
-                    naverMap.moveCamera(CameraUpdate.scrollTo(latLng).animate(CameraAnimation.Fly, 3000));
-                    setCenterCercle(latLng);
+                    centerlatLng = searchMeetupSpot();
+                    naverMap.moveCamera(CameraUpdate.scrollTo(centerlatLng).animate(CameraAnimation.Fly, 3000));
+                    setCenterCircle(centerlatLng);
                     break;
 
                 case R.id.buttonAccept:
 
                     LinkDAO.getInstance(this).insertAttendees(getIntent().getStringExtra("seq"),attendeeList);
                     Intent intent = new Intent(this, ResultPlacesActivity.class);
+                    if(centerlatLng != null) {
+                        intent.putExtra("centerLat",centerlatLng.latitude);
+                        intent.putExtra("centerLng",centerlatLng.longitude);
+                    }
                     intent.putExtra("seq",getIntent().getStringExtra("seq"));
                     startActivityForResult(intent,REQUEST_CODE);
                     break;
@@ -232,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //return new LatLng(minX+((maxX-minX)/2),minY+((maxY-minY)/2));
     }
 
-    private void setCenterCercle(LatLng latLng) {
+    private void setCenterCircle(LatLng latLng) {
         int radius = getResources().getDimensionPixelSize(R.dimen.pick_radius);
 
         if(circle!=null) circle.setMap(null);

@@ -67,16 +67,17 @@ public class JSONHelpeAsyncTask extends AsyncTask<String, Void, ArrayList<Attend
         try {
             JSONObject json = new JSONObject(getStringFromInputStream(in));
             JSONArray placeArray = json.getJSONArray("places");
-            String name,rAddr,jAddr,phone,id;
+            String frSeq,name,rAddr,jAddr,phone,id;
             double lat,lon, dist;
             for (int i=0 ; i<placeArray.length() ; i++) {
+                frSeq = placeArray.getJSONObject(i).getString("fr_seq");
                 name = placeArray.getJSONObject(i).getString("name");
                 rAddr = placeArray.getJSONObject(i).getString("road_address");
                 lon = placeArray.getJSONObject(i).getDouble("x");
                 lat = placeArray.getJSONObject(i).getDouble("y");
                 id = placeArray.getJSONObject(i).getString("sessionId");
 
-                result.add(new AttendeeDto(name,rAddr,lat,lon,id));
+                result.add(new AttendeeDto(frSeq,name,rAddr,lat,lon,id));
             }
         } catch (JSONException e) {
             e.printStackTrace();

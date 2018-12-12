@@ -22,4 +22,8 @@ public class MeetupDto {
         this.attendees = attendees;
         this.centerPoint = centerPoint;
     }
+    public MeetupDto(String seq, String title) {
+        this.seq = seq;
+        this.title = title;
+    }
 }
