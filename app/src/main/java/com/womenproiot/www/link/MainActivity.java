@@ -36,7 +36,7 @@ import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback,View.OnClickListener {
 // TODO: 2018-11-28 위치검색 -> 결과 5개 보여주고 선택하면 마커등록
-// TODO: 2018-11-28 Circle 안에 들어가는 주소,길이름 받아오기  -> 서울시 데이터와 매칭
+// TODO: 2018-11-28 Circle 안에 들어가는 주소,길이름 받아오기  -> 서울시 데이터와 
 // TODO: 2018-11-28 네이버에서 음식점 검색 추천.
 
     //상수정의
